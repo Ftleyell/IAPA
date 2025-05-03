@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth" style="scroll-snap-type: y mandatory;">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Boletín: Simposio IA FLENI (Estética Refinada)</title>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            /* --- Paleta --- */
+            :root {
+                --persian-red: #bb4430;
+                --verdigris: #7ebdc2;
+                --russian-violet: #34113f;
+                --lime: #cbff4d;
+                --black: #000000;
+                --white: #ffffff;
+                --light-grey: #f0f0f0; /* No usado directamente en body ahora */
+                --section-bg-light: #f8f8f8;
+                --text-primary: #1f1f1f;
+                --text-secondary: #666666;
+            }
+
+            /* --- Estilos Base y Reset Mínimo --- */
+            html {
+                box-sizing: border-box;
+                /* Scroll snapping aplicado al html */
+                scroll-snap-type: y mandatory;
+                 /* Asegura que el scroll suave funcione */
+                scroll-behavior: smooth;
+            }
+            *,
+            *:before,
+            *:after {
+                box-sizing: inherit;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: "Inter", sans-serif;
+                /* Permitir scroll vertical en el body */
+                overflow-y: scroll;
+                background-color: var(--white); /* Fondo base blanco */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+
+            /* --- Contenedor Principal (Eliminado) --- */
+            /* .contenedor-movil { ... } */
+
+            /* --- Animaciones de Entrada --- */
+            .elemento-animado,
+            .elemento-decorativo {
+                opacity: 0;
+                transition:
+                    opacity 0.8s cubic-bezier(0.25, 0.1, 0.25, 1),
+                    transform 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+                will-change: opacity, transform;
+            }
+            .elemento-animado {
+                transform: translateY(30px);
+            }
+            .elemento-decorativo {
+                transform: scale(0.7) rotate(-8deg);
+                transform-origin: center center;
+                transition-duration: 0.7s;
+                width: 4rem;
+                height: 4rem;
+                position: absolute;
+                z-index: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            .elemento-decorativo svg {
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+            .decorativo-grande { width: 5rem; height: 5rem; }
+            .decorativo-xl { width: 6rem; height: 6rem; }
+            .decorativo-xxl { width: 8rem; height: 8rem; }
+            .slide-in-left { transform: translateX(-50px) scale(0.7) rotate(-8deg); }
+            .slide-in-right { transform: translateX(50px) scale(0.7) rotate(-8deg); }
+            .fade-in-scale { transform: scale(0.9); }
+            .elemento-animado.is-visible,
+            .elemento-decorativo.is-visible {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg) translateX(0);
+            }
+
+            /* --- Estructura de Diapositivas (Secciones) --- */
+            .diapositiva {
+                min-height: 100vh; /* Ocupar al menos toda la altura del viewport */
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                padding: 4rem 1rem; /* Padding base (móvil) */
+                text-align: center;
+                position: relative;
+                overflow: hidden;
+                /* Propiedades para scroll snapping */
+                scroll-snap-align: start;
+                scroll-snap-stop: always;
+            }
+            /* Media query para padding en pantallas más grandes */
+            @media (min-width: 768px) { /* md: */
+                .diapositiva {
+                    padding: 5rem 2rem; /* Más padding en desktop */
+                }
+                /* Opcional: ajustar tamaño decorativos en desktop */
+                .elemento-decorativo { width: 5rem; height: 5rem; }
+                .decorativo-grande { width: 6rem; height: 6rem; }
+                .decorativo-xl { width: 7rem; height: 7rem; }
+                .decorativo-xxl { width: 9rem; height: 9rem; }
+            }
+
+            /* Colores de fondo alternos para las diapositivas */
+            /* Header ya no afecta el conteo nth-of-type */
+            section.diapositiva:nth-of-type(odd) { background-color: var(--white); }
+            section.diapositiva:nth-of-type(even) { background-color: var(--section-bg-light); }
+
+            /* --- Estilos de Contenido Principal --- */
+            .contenido-principal {
+                max-width: 650px; /* Un poco más de ancho máximo para desktop */
+                width: 100%;
+                z-index: 10;
+                position: relative;
+                text-align: left;
+                padding: 0 1rem; /* Padding horizontal interno */
+            }
+            /* Títulos de Sección (H2) */
+            .contenido-principal h2 {
+                text-align: left;
+                margin-bottom: 2.5rem;
+                font-size: 1.75rem;
+                line-height: 1.3;
+                font-weight: 900;
+                color: var(--russian-violet);
+                position: relative;
+                padding-left: 0;
+            }
+            .contenido-principal h2::after {
+                content: "";
+                position: absolute;
+                left: 0;
+                bottom: -0.75rem;
+                width: 3rem;
+                height: 4px;
+                background-color: var(--persian-red);
+                border-radius: 2px;
+                opacity: 0.8;
+            }
+            .contenido-principal h2::before { display: none; }
+
+            /* Citas (Blockquote) */
+            .contenido-principal blockquote {
+                font-style: italic;
+                color: var(--text-primary);
+                border: none;
+                padding: 1.5rem 2rem;
+                margin: 2.5rem 0;
+                font-size: 1.05rem;
+                background-color: rgba(126, 189, 194, 0.08);
+                border-radius: 0.5rem;
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                line-height: 1.65;
+                position: relative;
+                text-align: center;
+                font-weight: normal;
+            }
+            .contenido-principal blockquote::before,
+            .contenido-principal blockquote::after { display: none; }
+            .contenido-principal blockquote:hover {
+                transform: scale(1.02);
+                box-shadow: 0 4px 15px rgba(126, 189, 194, 0.15);
+            }
+            .contenido-principal blockquote span {
+                display: block;
+                margin-top: 1rem;
+                font-weight: bold;
+                font-style: normal;
+                font-size: 0.85rem;
+                color: var(--verdigris);
+                text-align: center;
+            }
+
+            /* Lista de Preguntas (UL) */
+            .contenido-principal ul.lista-preguntas {
+                list-style: none; padding-left: 0; margin-top: 2rem;
+            }
+            .contenido-principal ul.lista-preguntas li {
+                margin-bottom: 1.25rem;
+                padding-left: 2.25rem;
+                position: relative;
+            }
+            .contenido-principal ul.lista-preguntas li::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0.35em;
+                width: 1.5rem; height: 1.5rem;
+                background-color: var(--lime);
+                mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="black"><path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16ZM6.39 5.39a.75.75 0 0 1 1.08 0l1.83 1.83 1.83-1.83a.75.75 0 1 1 1.08 1.08L9.08 8l1.83 1.83a.75.75 0 1 1-1.08 1.08L8 9.08l-1.83 1.83a.75.75 0 1 1-1.08-1.08L6.92 8 5.09 6.11a.75.75 0 0 1 0-1.08Z"/></svg>');
+                mask-size: 70%; mask-repeat: no-repeat; mask-position: center;
+                border-radius: 50%;
+                flex-shrink: 0; opacity: 1;
+            }
+
+            /* Párrafos y elementos de lista */
+            .contenido-principal p,
+            .contenido-principal li {
+                font-size: 1rem;
+                line-height: 1.8;
+                color: var(--text-primary);
+            }
+            /* Ajuste de tamaño de fuente en pantallas grandes */
+             @media (min-width: 768px) { /* md: */
+                 .contenido-principal p, .contenido-principal li { font-size: 1.05rem; }
+                 .contenido-principal blockquote { font-size: 1.1rem; }
+                 .contenido-principal h2 { font-size: 2rem; }
+             }
+
+
+            /* Resaltado de Punto Clave */
+            .punto-clave {
+                background-color: transparent;
+                padding: 0.1rem 0;
+                border-radius: 0;
+                border-bottom: 3px solid var(--lime);
+                display: inline;
+                color: var(--russian-violet);
+                font-weight: bold;
+                box-shadow: none;
+            }
+
+            /* --- Header --- */
+            /* Header ahora es parte del flujo normal, no fijo */
+            header {
+                padding: 1.5rem 1.5rem; /* Padding ajustado */
+                text-align: center;
+                background-color: var(--russian-violet);
+                border-bottom: 4px solid var(--lime);
+                /* Asegurar que el header no interfiera con el snap */
+                scroll-snap-align: none;
+            }
+            header h1 {
+                font-size: 1.6rem;
+                line-height: 1.3;
+                font-weight: 900;
+                color: var(--white);
+                max-width: 650px; /* Mismo ancho que contenido principal */
+                margin: 0 auto; /* Centrar título */
+            }
+            header h1 br { display: block !important; }
+
+            /* --- Footer/Cierre --- */
+            #diapositiva-6 .contenido-principal { text-align: center; }
+            #diapositiva-6 a.boton-linkedin {
+                display: inline-flex; align-items: center; gap: 0.75rem;
+                background-color: var(--persian-red);
+                color: var(--white);
+                font-weight: bold;
+                padding: 0.9rem 1.8rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 3px 8px rgba(187, 68, 48, 0.3);
+                transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+                font-size: 0.95rem;
+                border: none;
+                text-decoration: none;
+            }
+            #diapositiva-6 a.boton-linkedin:hover {
+                background-color: #a23b2a;
+                transform: translateY(-2px) scale(1.03);
+                box-shadow: 0 5px 12px rgba(187, 68, 48, 0.4);
+            }
+            #diapositiva-6 a.boton-linkedin:hover svg { color: var(--white) !important; }
+            #diapositiva-6 a.boton-linkedin svg {
+                color: var(--white) !important;
+                transition: color 0.3s ease;
+                width: 1.1rem; height: 1.1rem;
+            }
+            #diapositiva-6 a.volver-inicio {
+                margin-top: 2.5rem;
+                font-size: 0.8rem;
+                color: var(--verdigris);
+                text-decoration: none;
+                transition: color 0.3s ease, letter-spacing 0.3s ease;
+                font-weight: bold;
+                display: inline-block;
+                padding: 0.5rem 0;
+            }
+            #diapositiva-6 a.volver-inicio:hover {
+                color: var(--persian-red);
+                letter-spacing: 0.5px;
+                transform: scale(1.05);
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1 class="font-black">
+                Boletín Informativo:<br />
+                Simposio IA FLENI
+            </h1>
+        </header>
+
+        <section id="diapositiva-1" class="diapositiva">
+            <div
+                class="elemento-decorativo decorativo-grande -top-6 -left-6 slide-in-left"
+                style="transition-delay: 0.5s; opacity: 0.5"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color: var(--verdigris); stop-opacity: 1" />
+                            <stop offset="100%" style="stop-color: var(--lime); stop-opacity: 1" />
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="45" fill="url(#grad1)" />
+                </svg>
+            </div>
+            <div
+                class="elemento-decorativo decorativo-xl -bottom-10 -right-8 slide-in-right"
+                style="transition-delay: 0.7s; opacity: 0.6"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M 10 90 C 20 10, 80 10, 90 90 Z"
+                        stroke="var(--persian-red)"
+                        stroke-width="3"
+                        fill="none"
+                        stroke-dasharray="5 5"
+                    />
+                </svg>
+            </div>
+            <div class="contenido-principal">
+                <h2 class="elemento-animado fade-in-scale">
+                    Proyecto SPOKE: Red de Conocimiento Biomédico
+                </h2>
+                <p class="elemento-animado mb-3 slide-in-left" style="transition-delay: 0.2s">
+                    El Dr. Sergio Beranzini presentó SPOKE, una red que integra datos clínicos,
+                    genéticos, bioquímicos, demográficos y sociales.
+                </p>
+                <p class="elemento-animado mb-3 slide-in-right" style="transition-delay: 0.3s">
+                    Esta red semántica permite a modelos de lenguaje recuperar, relacionar y
+                    contextualizar información médica compleja, buscando diagnósticos más precisos,
+                    tempranos y personalizados.
+                </p>
+                <p
+                    class="elemento-animado text-sm mb-3"
+                    style="transition-delay: 0.4s; color: var(--text-secondary)"
+                >
+                    Se enfatizó la necesidad de transparencia, validación externa y trazabilidad.
+                </p>
+                <blockquote class="elemento-animado fade-in-scale" style="transition-delay: 0.5s">
+                    La pregunta no es solo qué predicen estos modelos, sino cómo lo hacen y si
+                    podemos comprenderlo en términos clínicamente significativos.
+                </blockquote>
+            </div>
+        </section>
+
+        <section id="diapositiva-2" class="diapositiva">
+            <div
+                class="elemento-decorativo decorativo-xxl top-8 right-8 transform -rotate-12 slide-in-right"
+                style="transition-delay: 0.5s; opacity: 0.4"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect
+                        x="10"
+                        y="10"
+                        width="80"
+                        height="80"
+                        rx="30"
+                        ry="10"
+                        fill="var(--russian-violet)"
+                    />
+                </svg>
+            </div>
+            <div
+                class="elemento-decorativo decorativo-grande bottom-12 left-12 slide-in-left"
+                style="transition-delay: 0.7s; opacity: 0.7"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse
+                        cx="50"
+                        cy="50"
+                        rx="45"
+                        ry="45"
+                        fill="none"
+                        stroke="var(--lime)"
+                        stroke-width="4"
+                        stroke-dasharray="1 8"
+                        stroke-linecap="round"
+                    />
+                </svg>
+            </div>
+            <div class="contenido-principal">
+                <h2 class="elemento-animado fade-in-scale">
+                    La Importancia de la Ontología Médica
+                </h2>
+                <p class="elemento-animado mb-4" style="transition-delay: 0.2s">
+                    Se remarcó la importancia de definir y estructurar los conceptos médicos para
+                    que el conocimiento emergente sea fiable.
+                </p>
+                <blockquote class="elemento-animado fade-in-scale" style="transition-delay: 0.4s">
+                    “Lo que no se define, no se puede medir; lo que no se mide, no se puede
+                    mejorar”
+                    <span class="block mt-1">- Lord Kelvin</span>
+                </blockquote>
+            </div>
+        </section>
+
+        <section id="diapositiva-3" class="diapositiva">
+            <div
+                class="elemento-decorativo decorativo-xxl -top-12 left-0 slide-in-left"
+                style="transition-delay: 0.6s; opacity: 0.5"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <polygon points="5,95 95,95 50,5" fill="var(--lime)" />
+                </svg>
+            </div>
+            <div
+                class="elemento-decorativo decorativo-grande bottom-8 right-8 transform rotate-12 slide-in-right"
+                style="transition-delay: 0.8s; opacity: 0.6"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M 10 10 C 90 10, 10 90, 90 90"
+                        stroke="var(--verdigris)"
+                        stroke-width="3"
+                        fill="none"
+                    />
+                </svg>
+            </div>
+            <div class="contenido-principal">
+                <h2 class="elemento-animado fade-in-scale">
+                    IA, Psicología y Epistemología: Pensar el Pensamiento
+                </h2>
+                <p class="elemento-animado mb-3" style="transition-delay: 0.2s">
+                    Se exploró qué entendemos por inteligencia, recorriendo tradiciones filosóficas
+                    (nominalismo, realismo, constructivismo, inteligencias múltiples).
+                </p>
+                <p
+                    class="elemento-animado font-semibold mb-3"
+                    style="transition-delay: 0.3s; color: var(--russian-violet)"
+                >
+                    ¿Puede una IA ser “inteligente” sin voluntad, afecto, deseo?
+                </p>
+                <blockquote
+                    class="elemento-animado mb-3 fade-in-scale"
+                    style="transition-delay: 0.4s"
+                >
+                    “Conocer no es solo tener datos; es interpretarlos desde una posición
+                    subjetiva. La IA puede simbolizar, pero… ¿puede soñar?”
+                </blockquote>
+                <p class="elemento-animado mt-4" style="transition-delay: 0.5s">
+                    La conciencia, voluntad y la capacidad de preguntar más allá del dato se
+                    plantearon como dimensiones sin equivalencia computacional clara. ¿Lo
+                    irreductiblemente humano?
+                </p>
+            </div>
+        </section>
+
+        <section id="diapositiva-4" class="diapositiva">
+            <div
+                class="elemento-decorativo decorativo-xl top-15 left-10 slide-in-left"
+                style="transition-delay: 0.6s; opacity: 0.5"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="45" fill="none" stroke="var(--lime)" stroke-width="3" />
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="30"
+                        fill="none"
+                        stroke="var(--russian-violet)"
+                        stroke-width="3"
+                        opacity="0.8"
+                    />
+                    <circle cx="50" cy="50" r="15" fill="var(--lime)" />
+                </svg>
+            </div>
+            <div
+                class="elemento-decorativo decorativo-grande bottom-15 right-10 slide-in-right"
+                style="transition-delay: 0.8s; opacity: 0.6"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M 10 20 H 90 M 10 40 H 90 M 10 60 H 90 M 10 80 H 90"
+                        stroke="var(--persian-red)"
+                        stroke-width="4"
+                        stroke-linecap="round"
+                    />
+                </svg>
+            </div>
+            <div class="contenido-principal">
+                <h2 class="elemento-animado fade-in-scale">Aplicaciones Clínicas Concretas</h2>
+                <p class="elemento-animado mb-3" style="transition-delay: 0.2s">
+                    El equipo de FLENI compartió experiencias en diagnóstico temprano de ACV y
+                    patologías neurológicas agudas usando IA (RAPID, asistentes virtuales).
+                </p>
+                <p class="elemento-animado mb-3" style="transition-delay: 0.3s">
+                    Se mostró cómo estos sistemas asisten al profesional sin reemplazar su juicio
+                    clínico.
+                </p>
+                <p
+                    class="elemento-animado text-lg font-semibold fade-in-scale"
+                    style="transition-delay: 0.4s; color: var(--russian-violet)"
+                >
+                    <span class="punto-clave">La IA como “copiloto”</span>: potencia la toma de
+                    decisiones sin anular la responsabilidad ni la dimensión relacional.
+                </p>
+            </div>
+        </section>
+
+        <section id="diapositiva-5" class="diapositiva">
+            <div
+                class="elemento-decorativo decorativo-xl top-12 right-12 rounded-l-full slide-in-right"
+                style="transition-delay: 0.5s; opacity: 0.6"
+            >
+                <svg viewBox="0 0 50 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 50 0 A 50 50 0 0 0 50 100 Z" fill="var(--lime)" />
+                </svg>
+            </div>
+            <div
+                class="elemento-decorativo decorativo-xxl -bottom-15 -left-12 slide-in-left"
+                style="transition-delay: 0.7s; opacity: 0.4"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="10" y="10" width="80" height="80" rx="25" fill="var(--verdigris)" />
+                </svg>
+            </div>
+            <div class="contenido-principal">
+                <h2 class="elemento-animado fade-in-scale">Algunas Preguntas Abiertas…</h2>
+                <ul class="elemento-animado lista-preguntas" style="transition-delay: 0.2s">
+                    <li>
+                        ¿Puede la medicina integrar la precisión de la IA sin perder su dimensión
+                        humana, simbólica y ética?
+                    </li>
+                    <li>
+                        ¿Qué impacto tendrá en la formación profesional la convivencia con sistemas
+                        que superan nuestras capacidades diagnósticas en ciertos dominios?
+                    </li>
+                    <li>
+                        ¿La IA nos está obligando a redefinir qué entendemos por “pensar”,
+                        “entender”, o incluso “curar”?
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="diapositiva-6" class="diapositiva">
+            <div
+                class="elemento-decorativo decorativo-grande top-10 left-10 slide-in-left"
+                style="transition-delay: 0.5s; opacity: 0.6"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 10 10 Q 50 90 90 90 T 50 10 Z" fill="var(--lime)" />
+                </svg>
+            </div>
+            <div
+                class="elemento-decorativo decorativo-xl bottom-10 right-10 rounded-xl slide-in-right"
+                style="transition-delay: 0.7s; opacity: 0.7"
+            >
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle
+                        cx="50"
+                        cy="50"
+                        r="40"
+                        fill="none"
+                        stroke="var(--persian-red)"
+                        stroke-width="8"
+                    />
+                </svg>
+            </div>
+            <div class="contenido-principal">
+                <p class="elemento-animado mb-4" style="transition-delay: 0.2s">
+                    Nos pareció fundamental compartir este material, no solo por su actualidad, sino
+                    porque nos confronta con dilemas profundos.
+                </p>
+                <p
+                    class="elemento-animado font-semibold mb-6"
+                    style="transition-delay: 0.3s; color: var(--russian-violet)"
+                >
+                    Como estudiantes, profesionales y personas pensantes, nos preguntamos: ¿cómo
+                    sostener una práctica clínica crítica, situada y sensible en este nuevo
+                    escenario de inteligencia distribuida?
+                </p>
+                <p class="elemento-animado mb-4" style="transition-delay: 0.4s">
+                    Quedamos atentos a sus ideas, comentarios y lecturas.
+                </p>
+                <p class="elemento-animado mb-6" style="transition-delay: 0.5s">
+                    Cordialmente,<br />Neldo y Frani
+                </p>
+                <a
+                    href="https://www.linkedin.com/company/lamaquinadepensar"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="elemento-animado boton-linkedin fade-in-scale"
+                    style="transition-delay: 0.6s"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-4 h-4"
+                        fill="currentColor"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            d="M0 1.146C0 .513.526 0 1.175 0h13.65C15.474 0 16 .513 16 1.146v13.708c0 .633-.526 1.146-1.175 1.146H1.175C.526 16 0 15.487 0 14.854zm4.943 12.248V6.169H2.542v7.225zm-1.2-8.212c.837 0 1.358-.554 1.358-1.248-.015-.709-.52-1.248-1.342-1.248S2.4 3.226 2.4 3.934c0 .694.521 1.248 1.327 1.248zm4.908 8.212V9.359c0-.216.016-.432.08-.586.173-.431.568-.878 1.232-.878.869 0 1.216.662 1.216 1.634v3.865h2.401V9.25c0-2.22-1.184-3.252-2.764-3.252-1.274 0-1.845.7-2.165 1.193v.025h-.016l.016-.025V6.169h-2.4c.03.678 0 7.225 0 7.225z"
+                        />
+                    </svg>
+                    Visitar La Máquina de Pensar
+            </div>
+        </section>
+
+        <script>
+            // Seleccionar todos los elementos a animar
+            const elementosAnimados = document.querySelectorAll(
+                ".elemento-animado:not(header h1), .elemento-decorativo",
+            );
+
+            // Opciones para el Intersection Observer
+            const observerOptions = {
+                root: null, // Observar intersecciones con el viewport principal
+                rootMargin: "0px",
+                threshold: 0.15, // Umbral de visibilidad (15%)
+            };
+
+            // Función que se ejecuta cuando cambia la intersección
+            const observerCallback = (entries, observer) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                    } else {
+                        entry.target.classList.remove("is-visible");
+                    }
+                });
+            };
+
+            // Crear e iniciar el observer
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+            elementosAnimados.forEach((el) => {
+                observer.observe(el);
+            });
+
+            // Script para el enlace "Volver al inicio"
+            const linkVolverInicio = document.querySelector("a.volver-inicio");
+
+            if (linkVolverInicio) {
+                linkVolverInicio.addEventListener("click", (event) => {
+                    event.preventDefault();
+                    // Scroll suave al inicio de la página (documento)
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth",
+                    });
+                });
+            }
+        </script>
+    </body>
+</html>
